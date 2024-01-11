@@ -6,7 +6,11 @@
         "module": "ESNext",
         "moduleResolution": "node",
         "target": "ESNext",
-        "noEmitHelpers": true
+        "noEmitHelpers": true,
+        "types": [
+            "vitest/globals"
+        ],
+        "skipLibCheck": true,
     },
     "include": [
         "./src/**/*.ts"

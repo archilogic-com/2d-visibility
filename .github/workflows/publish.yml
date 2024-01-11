@@ -1,0 +1,35 @@
+# adopted from https://github.com/archilogic-com/actions/blob/main/.github/workflows/publish-npm-package.yml
+name: Publish NPM package
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc' 
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.CI_NPM_TOKEN_READONLY }}
+      
+      - run: npm run typecheck && npm run test
+      - id: get-dist-tag
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { parse } = require('semver')
+            const { version } = require('./package.json')
+
+            const [numberOrTag] = parse(version).prerelease
+            const isTag = typeof numberOrTag === 'string'
+            const distTag = isTag ? numberOrTag : 'latest'
+
+            core.setOutput('dist-tag', distTag)
+      - run: npm run build && npm publish --tag ${{steps.get-dist-tag.outputs.dist-tag}}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.CI_NPM_TOKEN }}

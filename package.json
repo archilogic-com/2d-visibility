@@ -1,5 +1,5 @@
 {
-  "name": "2d-visibility-demo-typescript",
+  "name": "@archilogic/2d-visibility",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
@@ -9,6 +9,9 @@
     },
     {
       "name": "David Neilsen"
+    },
+    {
+      "name": "Frederic Schwarz"
     }
   ],
   "license": "MIT",
@@ -31,6 +34,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "tslint --project tsconfig.json"
+    "test": "vitest --run",
+    "typecheck": "vue-tsc --noEmit"
   }
 }

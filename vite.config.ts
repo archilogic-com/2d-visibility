@@ -3,7 +3,6 @@ import dts from "vite-plugin-dts";
 
 export default defineConfig({
   test: {
-    environment: "jsdom",
     globals: true,
   },
   plugins: [dts({ rollupTypes: true })],
