@@ -1,6 +1,6 @@
 {
   "name": "@archilogic/2d-visibility",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "keywords": [],
   "contributors": [
@@ -26,6 +26,7 @@
     }
   },
   "devDependencies": {
+    "standard-version": "^9.5.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.11",
     "vite-plugin-dts": "^3.7.0",
@@ -35,6 +36,7 @@
     "dev": "vite",
     "build": "vite build",
     "test": "vitest --run",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "release": "standard-version"
   }
 }
