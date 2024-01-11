@@ -1,9 +1,5 @@
-import { lineIntersection } from './line-intersection';
-import { endpointCompare } from './endpoint-compare';
-import { segmentInFrontOf } from './segment-in-front-of';
-import { Point } from './point';
-import { EndPoint } from './end-point';
-import { Segment } from './segment';
+import { segmentInFrontOf, endpointCompare, lineIntersection } from './utils';
+import { Point, EndPoint, Segment } from './types';
 
 function getTrianglePoints(origin: Point, angle1: number, angle2: number, segment: Segment): Point[] {
   const p1 = origin;
@@ -34,8 +30,8 @@ function getTrianglePoints(origin: Point, angle1: number, angle2: number, segmen
 }
 
 export function calculateVisibility(origin: Point, endpoints: EndPoint[]): Point[][] {
-  const openSegments = [];
-  const output = [];
+  const openSegments: Segment[] = [];
+  const output: Point[][] = [];
   let beginAngle = 0;
 
   endpoints.sort(endpointCompare);

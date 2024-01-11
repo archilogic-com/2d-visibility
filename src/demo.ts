@@ -1,9 +1,7 @@
 import { drawScene } from './draw-scene';
 import { loadMap } from './load-map';
 import { calculateVisibility } from './visibility';
-import { Rectangle } from './rectangle';
-import { Segment } from './segment';
-import { Point } from './point';
+import { Point, PolygonWithHoles } from './types';
 
 // Prepare canvas
 const canvas = document.getElementById('scene') as HTMLCanvasElement;
@@ -18,28 +16,46 @@ const xOffset = 0.5;
 const yOffset = 0.5;
 ctx.translate(xOffset, yOffset);
 
-// Setup scene
-const room = new Rectangle(0, 0, 700, 500);
-
-const walls = [
-  new Segment(20, 20, 20, 120),
-  new Segment(20, 20, 100, 20),
-  new Segment(100, 20, 150, 100),
-  new Segment(150, 100, 50, 100),
+const polygon: PolygonWithHoles = [
+  [
+    [0, 0],
+    [200, 0],
+    [200, 200],
+    [220, 200],
+    [220, 50],
+    [700, 50],
+    [700, 500],
+    [600, 500],
+    [600, 300],
+    [400, 300],
+    [400, 320],
+    [580, 320],
+    [580, 450],
+    [0, 450],
+  ],
+  [
+    [120, 100],
+    [150, 100],
+    [150, 250],
+    [250, 250],
+    [250, 270],
+    [120, 270],
+  ],
+  [
+    [400, 150],
+    [500, 150],
+    [500, 250],
+    [400, 250]
+  ]
 ];
 
-const blocks = [
-  new Rectangle(50, 150, 20, 20),
-  new Rectangle(150, 150, 40, 80),
-  new Rectangle(400, 400, 40, 40),
-];
 
-const run = (lightSource: Point) => {
-  const endpoints = loadMap(room, blocks, walls, lightSource);
-  const visibility = calculateVisibility(lightSource, endpoints);
+const run = (point: Point) => {
+  const { endPoints, segments} = loadMap(polygon, point);
+  const visibility = calculateVisibility(point, endPoints);
 
   requestAnimationFrame(() =>
-    drawScene(ctx, lightSource, blocks, walls, visibility));
+    drawScene(ctx, point, segments, visibility));
 };
 
 canvas.addEventListener('mousemove', ({ pageX, pageY }) => {

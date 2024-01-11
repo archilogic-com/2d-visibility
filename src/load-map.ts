@@ -1,7 +1,4 @@
-import { Segment } from './segment';
-import { Rectangle } from './rectangle';
-import { Point } from './point';
-import { EndPoint } from './end-point';
+import { Point, EndPoint, Segment, PolygonWithHoles } from './types';
 
 const calculateEndPointAngles = (lightSource: Point, segment: Segment) => {
   const { x, y } = lightSource;
@@ -36,22 +33,18 @@ const processSegments = (lightSource: Point, segments: Segment[]) => {
   return segments;
 };
 
-export function loadMap(room: Rectangle, blocks: Rectangle[], walls: Segment[], lightSource: Point): EndPoint[] {
+export function loadMap(polygon: PolygonWithHoles, point: Point): { endPoints: EndPoint[], segments: Segment[] } {
   const segments: Segment[] = [];
-  for (const segment of room.getCornerSegments()) {
-    segments.push(segment);
-  }
-  for (const block of blocks) {
-    for (const segment of block.getCornerSegments()) {
-      segments.push(segment);
+  for (const loop of polygon) {
+    for (let i = 0; i < loop.length; i++) {
+      const currentPoint = loop[i];
+      const nextPoint = loop[i < loop.length - 1 ? i + 1 : 0];
+      segments.push(new Segment(currentPoint[0], currentPoint[1], nextPoint[0], nextPoint[1]));
     }
   }
-  for (const segment of walls) {
-    segments.push(segment);
-  }
   const endPoints: EndPoint[] = [];
-  for (const segment of processSegments(lightSource, segments)) {
+  for (const segment of processSegments(point, segments)) {
     endPoints.push(segment.p1, segment.p2);
   }
-  return endPoints;
+  return { endPoints, segments };
 }

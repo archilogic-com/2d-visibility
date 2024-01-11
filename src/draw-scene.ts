@@ -1,19 +1,9 @@
-import { Point } from './point';
-import { Rectangle } from './rectangle';
-import { Segment } from './segment';
-import { EndPoint } from './end-point';
-
-const drawRectangle = (ctx: CanvasRenderingContext2D, color: string, rectangle: Rectangle) => {
-  ctx.save();
-  ctx.strokeStyle = 'black';
-  ctx.strokeRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-  ctx.restore();
-};
+import { Point, Segment } from './types';
 
 const drawSegment = (ctx: CanvasRenderingContext2D, color: string, segment: Segment) => {
   ctx.save();
   ctx.beginPath();
-  ctx.strokeStyle = 'black';
+  ctx.strokeStyle = color;
   ctx.moveTo(segment.p1.x, segment.p1.y);
   ctx.lineTo(segment.p2.x, segment.p2.y);
   ctx.closePath();
@@ -36,13 +26,11 @@ const drawVisibilityTriangles = (ctx: CanvasRenderingContext2D, color: string, l
   ctx.restore();
 };
 
-export const drawScene = (ctx: CanvasRenderingContext2D, lightSource: Point, blocks: Rectangle[], walls: Segment[], visibilityOutput: Point[][]) => {
+export const drawScene = (ctx: CanvasRenderingContext2D, lightSource: Point, segments: Segment[], visibilityOutput: Point[][]) => {
   ctx.clearRect(-10000, -10000, 20000, 20000);
-  for (const block of blocks) {
-    drawRectangle(ctx, 'blue', block);
+  for (const segment of segments) {
+    drawSegment(ctx, 'blue', segment);
   }
-  for (const wall of walls) {
-    drawSegment(ctx, 'red', wall);
-  }
+ 
   drawVisibilityTriangles(ctx, 'gray', lightSource, visibilityOutput);
 };
